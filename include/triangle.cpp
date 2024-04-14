@@ -15,9 +15,12 @@ double compute_area(double x1, double y1, double x2, double y2, double x3, doubl
 }
 
 void compute_centroid(double x1, double y1, double x2, double y2, double x3, double y3, float* cx, float* cy) {
-    float ccx = (x1 + x2 + x3) / 3.0;
-    float ccy = (y1 + y2 + y3) / 3.0;
+   Polygon_2 p;
+    p.push_back(Point_2(x1, y1));
+    p.push_back(Point_2(x2, y2));
+    p.push_back(Point_2(x3, y3));
+    Point_2 c = CGAL::centroid(p.vertex(0), p.vertex(1), p.vertex(2));
     
-    *cx = ccx;
-    *cy = ccy;
+    *cx = CGAL::to_double(c.x());
+    *cy = CGAL::to_double(c.y());
 }

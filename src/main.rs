@@ -4,7 +4,6 @@ struct TestVal {
     point_a: Pos2,
     point_b: Pos2,
     point_c: Pos2,
-    // Centroid coordinates
     ccx: f32,
     ccy: f32,
 }
@@ -14,8 +13,8 @@ impl Default for TestVal {
             point_a: Pos2::new(100.0, 400.0),
             point_b: Pos2::new(300.0, 300.0),
             point_c: Pos2::new(400.0, 400.0),
-            ccx: 400.0, // Default centroid x-coordinate
-            ccy: 650.0, // Default centroid y-coordinate
+            ccx: 400.0,
+            ccy: 650.0,
         }
     }
 }
@@ -25,7 +24,6 @@ impl eframe::App for TestVal {
         egui::CentralPanel::default().show(ctx, |ui| {
             ui.heading("Triangle App");
 
-            // Input fields for triangle coordinates
             ui.horizontal(|ui| {
                 ui.vertical(|ui| {
                     ui.label("Point A:");
@@ -81,9 +79,13 @@ impl eframe::App for TestVal {
 
             let area_text = format!("Area: {:.2}", area);
             let centroid_text = format!("Centroid: x:{:.2} y:{:.2}", self.ccx, self.ccy);
-            ui.label(area_text);
+            ui.label(area_text.clone());
             ui.label(centroid_text);
-            // Drawing area
+            let text_color = egui::Color32::BLUE;
+            let text_position = egui::Pos2::new(self.ccx as f32, self.ccy + 20 as f32);
+            let text_align = egui::Align2::CENTER_CENTER;
+            let font_id = egui::FontId::default();
+
             let (response, painter) =
                 ui.allocate_painter(ui.available_size(), egui::Sense::hover());
 
@@ -103,16 +105,13 @@ impl eframe::App for TestVal {
             };
             let stroke = egui::Stroke::new(2.0, Color32::BLACK);
 
-            // Draw the triangle
             painter.add(Shape::line(points, stroke));
+            painter.text(text_position, text_align, &area_text, font_id, text_color);
 
             painter.circle_filled(Pos2::new(self.ccx, self.ccy), 5.0, Color32::RED);
-
-            let vertex_radius = 5.0;
-            painter.circle_filled(self.point_a, vertex_radius, Color32::GREEN);
-            painter.circle_filled(self.point_b, vertex_radius, Color32::GREEN);
-            painter.circle_filled(self.point_c, vertex_radius, Color32::GREEN);
-
+            painter.circle_filled(self.point_a, 5.0, Color32::GREEN);
+            painter.circle_filled(self.point_b, 5.0, Color32::GREEN);
+            painter.circle_filled(self.point_c, 5.0, Color32::GREEN);
         });
     }
 }
