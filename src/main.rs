@@ -1,4 +1,3 @@
-// src/main.rs
 use eframe::egui::{self, Color32, Pos2, Shape, Stroke};
 struct TestVal {
     point_a: Pos2,
